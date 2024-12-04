@@ -30,7 +30,7 @@ juce_add_plugin(dfmJulioos
 
 # Julia setup
 set(JULIA_EXECUTABLE /usr/local/bin/julia)
-set(JULIA_SOURCE ${CMAKE_SOURCE_DIR}/Source/dfm1.jl)
+set(JULIA_SOURCE ${CMAKE_SOURCE_DIR}/Source/dfm1)
 set(JULIA_LIB_DIR ${CMAKE_BINARY_DIR}/libs)
 set(JULIA_LIB_NAME libdfm1.${CMAKE_SHARED_LIBRARY_SUFFIX})
 set(JULIA_OUTPUT_PATH ${JULIA_LIB_DIR}/${JULIA_LIB_NAME})
@@ -40,13 +40,21 @@ set(JULIA_INCLUDE_DIR /usr/local/Cellar/julia/1.11.1/include/julia)
 file(MAKE_DIRECTORY ${JULIA_LIB_DIR})
 
 # Custom command to build the Julia shared library
+#create_library("MyLib", "MyLibCompiled";
+#        lib_name="libinc",
+#        precompile_execution_file="MyLib/build/generate_precompile.jl",
+#        precompile_statements_file="MyLib/build/additional_precompile.jl",
+#        header_files = ["MyLib/build/mylib.h"])
+
 add_custom_command(
         OUTPUT ${JULIA_OUTPUT_PATH}
-        COMMAND ${JULIA_EXECUTABLE} --project -e "
+        COMMAND ${JULIA_EXECUTABLE} --project ${JULIA_SOURCE} -e "
         using PackageCompiler;
-        create_library(\"${JULIA_SOURCE}\",
-                       outputs=[\"${JULIA_OUTPUT_PATH}\"],
-                       name=\"dfm1\")"
+        create_library(
+            \"${JULIA_SOURCE}/dfm1.jl\",
+            \"dfm1Compiled\",
+            lib_name=\"dfm1\"
+        )"
         DEPENDS ${JULIA_SOURCE}
         COMMENT "Compiling Julia code to a shared library"
         VERBATIM

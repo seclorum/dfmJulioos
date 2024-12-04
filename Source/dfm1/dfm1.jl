@@ -13,6 +13,10 @@
 #     double band_state;
 # } DFM1;
 
+module MyLib
+
+export DFM1, process_sample, update_parameters
+
 # Define the DFM1 filter structure in Julia
 mutable struct DFM1
     sample_rate::Float64       # Sampling rate
@@ -26,14 +30,14 @@ mutable struct DFM1
 end
 
 # Constructor function for the filter
-function DFM1(sample_rate::Float64; cutoff::Float64 = 1000.0, resonance::Float64 = 0.1, drive::Float64 = 1.0)
+Base.@ccallable function DFM1(sample_rate::Float64; cutoff::Float64 = 1000.0, resonance::Float64 = 0.1, drive::Float64 = 1.0)
     # C equivalent initialization:
     # DFM1 filter = {sample_rate, cutoff, resonance, drive, 0.0, 0.0, 0.0, 0.0};
     return DFM1(sample_rate, cutoff, resonance, drive, 0.0, 0.0, 0.0, 0.0)
 end
 
 # Process a single sample through the filter
-function process_sample(filter::DFM1, input::Float64)::Float64
+Base.@ccallable function process_sample(filter::DFM1, input::Float64)::Float64
     # C equivalent:
     # double f = 2.0 * sin(M_PI * filter->cutoff / filter->sample_rate);
     # double q = filter->resonance;
@@ -61,7 +65,7 @@ function process_sample(filter::DFM1, input::Float64)::Float64
 end
 
 # Update filter parameters (cutoff and resonance)
-function update_parameters!(filter::DFM1; cutoff::Float64 = nothing, resonance::Float64 = nothing)
+Base.@ccallable function update_parameters!(filter::DFM1; cutoff::Float64 = nothing, resonance::Float64 = nothing)
     # C equivalent:
     # if (cutoff != NULL) {
     #     filter->cutoff = clamp(*cutoff, 20.0, filter->sample_rate / 2.0);
