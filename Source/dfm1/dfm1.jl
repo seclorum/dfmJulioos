@@ -13,7 +13,7 @@
 #     double band_state;
 # } DFM1;
 
-module MyLib
+module DFM1Lib
 
 export DFM1, process_sample, update_parameters
 
