@@ -7,3 +7,14 @@ build properly - yet.  But I'm working on it.
 
 Any questions/suggestions, please make an Issue.
 
+
+## About DFM1:
+
+"DFM1 is a digital filter module based on a real analog filter circuit, the AFM-1."
+...
+"The AFM-1 and DFM-1 were designed by Tony Hardie-Bick"
+
+Full details here:  http://www.entity.net/dfm1/
+
+
+
